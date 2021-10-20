@@ -1,0 +1,11 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/bootstrap.min.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/jquery.fancybox.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/owl.carousel.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/jquery.jcarousellite.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/jquery.elevatezoom.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/TimeCircles.js"></script>
+<script type="text/javascript" src="../client/public/js/libs/flipclock.js"></script>
+<script type="text/javascript" src="../client/public/js/theme.js"></script>

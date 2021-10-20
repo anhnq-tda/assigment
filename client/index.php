@@ -3,17 +3,30 @@
   /*
       PDO: PHP Data Object là 1 class cung cấp các phương thức để truy xuất DB
   */ 
+  //get slider
   $query = "SELECT * FROM slider LIMIT 3";
   $stmt = $connection->prepare($query);
 
+  // get 10 category
   $query_category = "SELECT * FROM loai_hang order by ma_loai desc LIMIT 10";
   $stmt_category = $connection->prepare($query_category);
-
+  // get 30 product
   $products = "SELECT * FROM hang_hoa order by ma_hh desc LIMIT 30";
   $stmt_products = $connection->prepare($products);
-
-  $top_10_product = "SELECT * FROM hang_hoa order by ma_hh desc LIMIT 10";
+  // get top 10 prodcut
+  $top_10_product = "SELECT * FROM hang_hoa ORDER BY RAND() LIMIT 10";
   $stmt_product = $connection->prepare($top_10_product);
+  // get product new feature
+  $product_new = "SELECT * FROM hang_hoa order by ma_hh desc LIMIT 20";
+  $stmt_product_new = $connection->prepare($product_new);
+  // get product by category
+  $product_by_category = "select loai_hang.ma_loai, loai_hang.ten_loai, hang_hoa.ten_hh, hang_hoa.don_gia, hang_hoa.hinh from loai_hang join hang_hoa ON loai_hang.ma_loai = hang_hoa.ma_loai";
+  $stmt_product_by_category = $connection->prepare($product_by_category);
+
+  // product best seller
+  $product_best_seller = "SELECT * FROM hang_hoa where luot_xem >= 100; LIMIT 20";
+  $stmt_product_best_seller = $connection->prepare($product_best_seller);
+
   /*
       -> dùng để truy cập vào phương thức
       prepare(): phương thức chuẩn bị 1 câu lệnh SQL
@@ -34,39 +47,23 @@
   $stmt_product->execute();
   $top_10_product = $stmt_product->fetchAll();
 
+  // product by category
+  $stmt_product_by_category->execute();
+  $product_by_category = $stmt_product_by_category->fetchAll();
+
+  // get product new 
+  $stmt_product_new->execute();
+  $product_new = $stmt_product_new->fetchAll();
+  // get product best seller 
+  $stmt_product_best_seller->execute();
+  $product_best_seller = $stmt_product_best_seller->fetchAll();
 ?>
 <!DOCTYPE HTML>
 <html lang="en-US">
 
 <!-- Mirrored from demo.7uptheme.com/html/kuteshop/home-03.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 08 Jul 2018 03:00:57 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<meta name="description" content="Kute Shop is new Html theme that we have designed to help you transform your store into a beautiful online showroom. This is a fully responsive Html theme, with multiple versions for homepage and multiple templates for sub pages as well" />
-	<meta name="keywords" content="Kute Shop,7uptheme" />
-	<meta name="robots" content="noodp,index,follow" />
-	<meta name='revisit-after' content='1 days' />
-	<title>Kute Shop | Home Style 3</title>
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/font-awesome.min.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/bootstrap-theme.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/jquery.fancybox.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/jquery-ui.min.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/owl.carousel.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/owl.transitions.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/owl.theme.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/jquery.mCustomScrollbar.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/animate.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/hover.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/libs/flipclock.css"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/color-blue.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/theme.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/responsive.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="../client/public/css/browser.css" media="all"/>
-	<!-- <link rel="stylesheet" type="text/css" href="css/rtl.css" media="all"/> -->
-</head>
+<?php include "./layout/header.php"; ?>
 <body style="background:#fff">
 <div class="wrap">
 	<div id="header">
@@ -76,10 +73,10 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<div class="account-login account-login3">
-								<a href="#">My Account</a>
-								<a href="#">checkout</a>
-								<a href="#">Login</a>
-								<a href="#">Register</a>
+								<a href="./index.php">Trang Chủ</a>
+								<a href="./checkout">Giỏ Hàng</a>
+								<a href="./login.php">Đăng Nhập</a>
+								<a href="./register.php">Đăng Ký</a>
 							</div>
 						</div>
 					</div>
@@ -88,6 +85,27 @@
 		</div>
 	</div>
 	<!-- End Header -->
+	<div class="main-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="logo logo4">
+						<h1 class="hidden">kuteshop wordpress theme</h1>
+						<a href="./index.php"><img src="../client/public/images/home4/logo.png" alt="" /></a>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="smart-search4">
+						<form class="smart-search-form">
+							<input type="text" onblur="if (this.value=='') this.value = this.defaultValue" onfocus="if (this.value==this.defaultValue) this.value = ''" value="Search...">
+							<input type="submit" value="">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div id="content">
 		<div class="container">
 			<div class="main-content-home3">
@@ -109,205 +127,42 @@
 									<?php endforeach ?>
 								</div>
 							</div>
-							
-							<div class="new-product3">
-                                <h2 class="title14 bg-color white">Danh Mục A</h2>
-								<div class="newpro-slider3 arrow-style3">
-									<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
-                                        <?php foreach ($products as $product): ?>
-										<div class="item-newpro3">
-											<div class="item-product item-product3">
-												<div class="product-thumb">
-													<a class="product-thumb-link" href="detail.html">
-														<img style="width: 350px; height:500px;" alt="" src="../images/<?php echo $product['hinh'] ?>">
-													</a>
-												</div>
-												<div class="product-info">
-													<h3 class="product-title"><a href="detail.html"><?php echo $product['ten_hh'] ?></a></h3>
-													<div class="product-price">
-														<ins><span><?php echo $product['don_gia'] ?>VNĐ</span></ins>
+							<?php foreach ($product_by_category as $item): ?>
+								<div class="new-product3">
+									<h2 class="title14 bg-color white"><?php echo $item['ten_loai'] ?></h2>
+									<div class="newpro-slider3 arrow-style3">
+										<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
+											<div class="item-newpro3">
+												<div class="item-product item-product3">
+													<div class="product-thumb">
+														<a class="product-thumb-link" href="./detail.php">
+															<img style="width: 350px; height:350px;" alt="" src="../images/<?php echo $item['hinh'] ?>">
+														</a>
+													</div>
+													<div class="product-info">
+														<h3 class="product-title"><a href="./detail.php"><?php echo $item['ten_hh'] ?></a></h3>
+														<div class="product-price">
+															<ins><span><?php echo $item['don_gia'] ?>VNĐ</span></ins>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-                                        <?php endforeach ?>
 									</div>
 								</div>
-							</div>
-                            <div class="new-product3">
-                                <h2 class="title14 bg-color white">Danh Mục A</h2>
-								<div class="newpro-slider3 arrow-style3">
-									<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
-                                        <?php foreach ($products as $product): ?>
-										<div class="item-newpro3">
-											<div class="item-product item-product3">
-												<div class="product-thumb">
-													<a class="product-thumb-link" href="detail.html">
-														<img style="width: 350px; height:500px;" alt="" src="../images/<?php echo $product['hinh'] ?>">
-													</a>
-												</div>
-												<div class="product-info">
-													<h3 class="product-title"><a href="detail.html"><?php echo $product['ten_hh'] ?></a></h3>
-													<div class="product-price">
-														<ins><span><?php echo $product['don_gia'] ?>VNĐ</span></ins>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <?php endforeach ?>
-									</div>
-								</div>
-							</div>
-                            <div class="new-product3">
-                                <h2 class="title14 bg-color white">Danh Mục A</h2>
-								<div class="newpro-slider3 arrow-style3">
-									<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
-                                        <?php foreach ($products as $product): ?>
-										<div class="item-newpro3">
-											<div class="item-product item-product3">
-												<div class="product-thumb">
-													<a class="product-thumb-link" href="detail.html">
-														<img style="width: 350px; height:500px;" alt="" src="../images/<?php echo $product['hinh'] ?>">
-													</a>
-												</div>
-												<div class="product-info">
-													<h3 class="product-title"><a href="detail.html"><?php echo $product['ten_hh'] ?></a></h3>
-													<div class="product-price">
-														<ins><span><?php echo $product['don_gia'] ?>VNĐ</span></ins>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <?php endforeach ?>
-									</div>
-								</div>
-							</div>
-                            <div class="new-product3">
-                                <h2 class="title14 bg-color white">Danh Mục A</h2>
-								<div class="newpro-slider3 arrow-style3">
-									<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
-                                        <?php foreach ($products as $product): ?>
-										<div class="item-newpro3">
-											<div class="item-product item-product3">
-												<div class="product-thumb">
-													<a class="product-thumb-link" href="detail.html">
-														<img style="width: 350px; height:500px;" alt="" src="../images/<?php echo $product['hinh'] ?>">
-													</a>
-												</div>
-												<div class="product-info">
-													<h3 class="product-title"><a href="detail.html"><?php echo $product['ten_hh'] ?></a></h3>
-													<div class="product-price">
-														<ins><span><?php echo $product['don_gia'] ?>VNĐ</span></ins>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <?php endforeach ?>
-									</div>
-								</div>
-							</div>
-                            <div class="new-product3">
-                                <h2 class="title14 bg-color white">Danh Mục A</h2>
-								<div class="newpro-slider3 arrow-style3">
-									<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[1024,3]]">
-                                        <?php foreach ($products as $product): ?>
-										<div class="item-newpro3">
-											<div class="item-product item-product3">
-												<div class="product-thumb">
-													<a class="product-thumb-link" href="detail.html">
-														<img style="width: 350px; height:500px;" alt="" src="../images/<?php echo $product['hinh'] ?>">
-													</a>
-												</div>
-												<div class="product-info">
-													<h3 class="product-title"><a href="detail.html"><?php echo $product['ten_hh'] ?></a></h3>
-													<div class="product-price">
-														<ins><span><?php echo $product['don_gia'] ?>VNĐ</span></ins>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <?php endforeach ?>
-									</div>
-								</div>
-							</div>
+							<?php endforeach ?>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="content-right3">
 							<div class="betpro3 box-side">
 								<h2 class="title14 white bg-color title-side">Danh mục Sản Phẩm</h2>
-								<div class="content-side toggle-tab toggle-betsale">
+								<div class="content-side">
+									
+										 
                                     <?php foreach ($categories as $category): ?>
 									<div class="item-toggle-tab">
 										<h3 class="toggle-tab-title title14"><?php echo $category['ten_loai'] ?></h3>
-										<div class="toggle-tab-content">
-											<div class="row">
-												<div class="col-md-6 col-sm-6 col-xs-6">
-													<div class="item-product3">
-														<div class="product-thumb">
-															<a class="product-thumb-link" href="detail.html">
-																<img alt="" src="../client/public/images/photos/fashion/9.jpg">
-															</a>
-															<a class="quickview-link plus pos-middle fancybox.iframe" href="quick-view.html"><span>quick view</span></a>
-														</div>
-														<div class="product-info">
-															<div class="product-price">
-																<del><span>$135.00</span></del>
-																<ins><span>$123.00</span></ins>
-															</div>
-															<span class="order-pro">489 Order</span>
-														</div>
-													</div>
-													<div class="item-product3">
-														<div class="product-thumb">
-															<a class="product-thumb-link" href="detail.html">
-																<img alt="" src="../client/public/images/photos/fashion/2.jpg">
-															</a>
-															<a class="quickview-link plus pos-middle fancybox.iframe" href="quick-view.html"><span>quick view</span></a>
-														</div>
-														<div class="product-info">
-															<div class="product-price">
-																<del><span>$30.00</span></del>
-																<ins><span>$20.00</span></ins>
-															</div>
-															<span class="order-pro">107 Order</span>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-6 col-xs-6">
-													<div class="item-product3">
-														<div class="product-thumb">
-															<a class="product-thumb-link" href="detail.html">
-																<img alt="" src="../client/public/images/photos/fashion/10.jpg">
-															</a>
-															<a class="quickview-link plus pos-middle fancybox.iframe" href="quick-view.html"><span>quick view</span></a>
-														</div>
-														<div class="product-info">
-															<div class="product-price">
-																<del><span>$80.00</span></del>
-																<ins><span>$53.00</span></ins>
-															</div>
-															<span class="order-pro">500 Order</span>
-														</div>
-													</div>
-													<div class="item-product3">
-														<div class="product-thumb">
-															<a class="product-thumb-link" href="detail.html">
-																<img alt="" src="../client/public/images/photos/fashion/14.jpg">
-															</a>
-															<a class="quickview-link plus pos-middle fancybox.iframe" href="quick-view.html"><span>quick view</span></a>
-														</div>
-														<div class="product-info">
-															<div class="product-price">
-																<del><span>$70.00</span></del>
-																<ins><span>$40.00</span></ins>
-															</div>
-															<span class="order-pro">29 Order</span>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
 									</div>
                                     <?php endforeach ?>
 									<!-- End Item -->
@@ -343,49 +198,16 @@
 							</div>
 							<!-- End Top Review -->
 							<div class="top-brand3 box-side">
-								<h2 class="title14 white bg-color title-side">top brands</h2>
+								<h2 class="title14 white bg-color title-side">Sản Phẩm Mới</h2>
 								<div class="content-side">
 									<div class="brand-slider3 arrow-style3">
 										<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[768,1]]">
 											<div class="list-brand3">
+												<?php foreach ($product_new as $item_product): ?>
 												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top1.png"></a>
+													<a class="pulse" href="#"><img alt="" src="../images/<?php echo $item_product['hinh']; ?>"></a>
 												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top2.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top3.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top4.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top5.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top6.png"></a>
-												</div>
-											</div>
-											<div class="list-brand3">
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top6.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top5.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top4.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top3.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top2.png"></a>
-												</div>
-												<div class="logo-brand">
-													<a class="pulse" href="#"><img alt="" src="../client/public/images/home3/top1.png"></a>
-												</div>
+												<?php endforeach ?>
 											</div>
 										</div>
 									</div>
@@ -397,30 +219,15 @@
 								<div class="content-side">
 									<div class="advert-slider3 arrow-style3">
 										<div class="wrap-item" data-pagination="false" data-navigation="true" data-itemscustom="[[0,1],[480,2],[768,1]]">
-											<div class="item-advert3">
-												<div class="banner-zoom">
-													<a class="thumb-zoom" href="#"><img alt="" src="../client/public/images/photos/home3/ad-1.jpg"></a>
+											<?php foreach ($product_best_seller as $item_product_best_seller): ?>
+												<div class="item-advert3">
+													<div class="banner-zoom">
+														<a class="thumb-zoom" href="#"><img alt="" src="../images/<?php echo $item_product_best_seller['hinh'];?>"></a>
+													</div>
+													<h2 class="title14"><?php echo $item_product_best_seller['ten_hh']; ?></h2>
+													<a href="./detail.php" class="btn-rect radius white bg-color">Chi Tiết Sản Phẩm</a>
 												</div>
-												<h2 class="title14">Fashion & Accessories</h2>
-												<p>Be for bag, Oleva, Unistar & more</p>
-												<a href="#" class="btn-rect radius white bg-color">Shop now!</a>
-											</div>
-											<div class="item-advert3">
-												<div class="banner-zoom">
-													<a class="thumb-zoom" href="#"><img alt="" src="../client/public/images/photos/home3/ad-2.jpg"></a>
-												</div>
-												<h2 class="title14">Fashion & Accessories</h2>
-												<p>Be for bag, Oleva, Unistar & more</p>
-												<a href="#" class="btn-rect radius white bg-color">Shop now!</a>
-											</div>
-											<div class="item-advert3">
-												<div class="banner-zoom">
-													<a class="thumb-zoom" href="#"><img alt="" src="../client/public/images/photos/home3/ad-3.jpg"></a>
-												</div>
-												<h2 class="title14">Fashion & Accessories</h2>
-												<p>Be for bag, Oleva, Unistar & more</p>
-												<a href="#" class="btn-rect radius white bg-color">Shop now!</a>
-											</div>
+												<?php endforeach ?>
 										</div>
 									</div>
 								</div>
@@ -623,17 +430,7 @@
 	<!-- End Footer -->
 	<a href="#" class="radius scroll-top style1"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
 </div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/bootstrap.min.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/jquery.fancybox.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/jquery-ui.min.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/owl.carousel.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/jquery.jcarousellite.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/jquery.elevatezoom.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/jquery.mCustomScrollbar.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/TimeCircles.js"></script>
-<script type="text/javascript" src="../client/public/js/libs/flipclock.js"></script>
-<script type="text/javascript" src="../client/public/js/theme.js"></script>
+<?php include "./layout/footer.php"; ?>
 </body>
 
 <!-- Mirrored from demo.7uptheme.com/html/kuteshop/home-03.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 08 Jul 2018 03:02:41 GMT -->
