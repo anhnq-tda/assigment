@@ -243,13 +243,12 @@
 												<img src="images/shop/tab-img.png" alt="" />
 											</div>
 											<div class="detail-tab-info">
-												<p class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid unt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercit a tion ulla mco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehen derit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident est laborum.</p>
-												<ul>
-													<li>Any Product types that You want - Simple, Configurable, Bundled and Grouped Products</li>
-													<li>Downloadable/Digital Products, Virtual Products</li>
-													<li>Inventory Management with Backordered items</li>
-												</ul>
-											</div>
+												<!-- Load Facebook SDK for JavaScript -->
+												<div id="fb-root"></div>
+												<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=292463331479037&autoLogAppEvents=1" nonce="XJ4McKNz"></script>
+
+											<!-- Your embedded comments code -->
+											<div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" data-width="" data-numposts="5"></div>
 										</div>
 									</div>
 								</div>
